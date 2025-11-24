@@ -489,9 +489,20 @@ const cryptoToAmount = debounce(() => {
   }
 }, 500);
 
-const verifyAddress = () => {
+const verifyAddress = async () => {
   const valid = addressValidator(form.address, form.cryptoSelected);
   if (valid) {
+    const { isRestricted, reason } = await fetch(
+      `https://partners.mewapi.io/o/walletscreen?address=${form.address}`
+    ).then((res) => res.json());
+    if (isRestricted) {
+      form.addressErrorMsg =
+        reason || "The provided address is restricted from purchasing crypto.";
+      form.addressError = true;
+      form.validAddress = false;
+      return;
+    }
+
     form.addressErrorMsg = "";
     form.addressError = false;
     form.validAddress = true;
@@ -500,7 +511,7 @@ const verifyAddress = () => {
       form.addressErrorMsg = "";
       form.validAddress = false;
     } else {
-      form.addressErrorMsg = `Please provide a valid ${form.cryptoSelected} address`;
+      form.addressErrorMsg = `Please provide a valid ${form.cryptoSelected} `;
       form.validAddress = false;
     }
   }

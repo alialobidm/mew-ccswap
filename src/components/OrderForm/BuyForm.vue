@@ -510,9 +510,20 @@ const addressInput = (value: string, isResolved: string): void => {
   verifyAddress();
 };
 
-const verifyAddress = (): void => {
+const verifyAddress = async (): Promise<void> => {
   const valid = addressValid.value;
   if (valid) {
+    const { isRestricted, reason } = await fetch(
+      `https://partners.mewapi.io/o/walletscreen?address=${form.address}`
+    ).then((res) => res.json());
+    if (isRestricted) {
+      form.addressErrorMsg =
+        reason || "The provided address is restricted from purchasing crypto.";
+      form.addressError = true;
+      form.validAddress = false;
+      return;
+    }
+
     form.addressErrorMsg = "";
     form.addressError = false;
     form.validAddress = true;
