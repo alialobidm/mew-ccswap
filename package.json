@@ -35,7 +35,7 @@
     "buffer": "^6.0.3",
     "core-js": "^3.8.3",
     "eth-ens-namehash": "^2.0.8",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "multicoin-address-validator": "^0.5.9",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "patch-package": "^8.0.0",
